@@ -1,10 +1,11 @@
 from selene import have, be
 from selene.support.shared import browser
-from selenium.webdriver import Keys
 
-from demoqa_tests.model.methods import method
+from demoqa_tests.model.methods import checkbox
+from demoqa_tests.model.methods import dropdown
+from demoqa_tests.model.methods import radio
+from demoqa_tests.model.methods import datepicker
 from demoqa_tests.utils import path_generate
-import sys
 
 
 def opening():
@@ -24,16 +25,15 @@ def input_mail(value):
 
 
 def set_gender(value):
-    browser.all('[name=gender]').element_by(have.value(value)).element('..').click()
+    radio.set_radio('[name=gender]', value)
 
 
 def input_phone(value):
     browser.element("#userNumber").set_value(value)
 
 
-def set_date(date):
-    browser.element("#dateOfBirthInput").send_keys(
-        Keys.COMMAND if sys.platform == 'darwin' else Keys.CONTROL, 'a').type(date).press_enter()
+def input_date(date):
+    datepicker.set_date("#dateOfBirthInput", date)
 
 
 def input_subject(value):
@@ -43,7 +43,7 @@ def input_subject(value):
 
 
 def set_hobby(list_value):
-    method.set_checkboxes("[for^=hobbies-checkbox]", list_value)
+    checkbox.set_checkboxes("[for^=hobbies-checkbox]", list_value)
 
 
 def send_image(name_file):
@@ -55,11 +55,11 @@ def input_address(value):
 
 
 def select_state(value):
-    method.select_value_from_drop_down_list('#state', '[id^=react-select][id*=option]', value)
+    dropdown.select_value_from_drop_down_list('#state', '[id^=react-select][id*=option]', value)
 
 
 def select_city(value):
-    method.select_value_from_drop_down_list('#city', '[id^=react-select][id*=option]', value)
+    dropdown.select_value_from_drop_down_list('#city', '[id^=react-select][id*=option]', value)
 
 
 def submit():
@@ -73,7 +73,7 @@ def fill_registration_form(*, name, surname, mail, gender, phone, birthday, subj
     input_mail(mail)
     set_gender(gender)
     input_phone(phone)
-    set_date(birthday)
+    input_date(birthday)
     input_subject(subject)
     set_hobby(hobby)
     send_image(name_file)
